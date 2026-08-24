@@ -36,3 +36,7 @@ assets/
 *.suo
 *.ntvs*
 *.sw?
+
+# Wrangler local
+.wrangler/
+.dev.vars
