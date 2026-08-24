@@ -33,5 +33,10 @@ jobs:
           test -n "$CLOUDFLARE_API_TOKEN" || (echo "::error::Missing CLOUDFLARE_API_TOKEN secret" && exit 1)
           test -n "$CLOUDFLARE_ACCOUNT_ID" || (echo "::error::Missing CLOUDFLARE_ACCOUNT_ID secret" && exit 1)
 
-      - name: Deploy to Cloudflare Workers (static site)
-        run: npx wrangler deploy
+      - name: Deploy to Cloudflare Workers
+        run: npx wrangler deploy 2>&1 | tee deploy.log
+
+      - name: Publish deploy URL
+        run: |
+          echo "### Deploy log" >> $GITHUB_STEP_SUMMARY
+          grep -E "workers.dev|Deployed|Published|https://" deploy.log >> $GITHUB_STEP_SUMMARY || tail -20 deploy.log >> $GITHUB_STEP_SUMMARY
