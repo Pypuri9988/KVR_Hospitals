@@ -1,29 +1,29 @@
-# Cloudflare Pages — GitHub Actions setup
+# Cloudflare Workers deploy — GitHub Actions
 
 ## Required GitHub secrets
 
 | Secret | Value |
 |--------|--------|
-| `CLOUDFLARE_API_TOKEN` | API token from Cloudflare |
+| `CLOUDFLARE_API_TOKEN` | Your Cloudflare API token |
 | `CLOUDFLARE_ACCOUNT_ID` | `7d76040bb4c03dfa5ff33994e6e3e7ed` |
 
-## API token permissions (important)
+## Your token — what it covers
 
-When creating the token at Cloudflare → My Profile → API Tokens → Create Token:
+Your token has **Workers Scripts:Edit** and **Account Settings:Read** — that is enough for this project.
 
-Use **Edit Cloudflare Workers** template, then ensure these are checked:
+We deploy with `wrangler deploy` (Workers static assets), **not** Cloudflare Pages — so **Cloudflare Pages:Edit is not required**.
 
-- Account → **Cloudflare Pages** → **Edit**
-- Account → **Workers Scripts** → **Edit**
-- Account → **Account Settings** → **Read**
-
-If deploy fails with 403/authentication error, recreate the token with Pages Edit permission.
+| Permission | Needed | Your token |
+|-----------|--------|------------|
+| Workers Scripts → Edit | ✅ | ✅ |
+| Account Settings → Read | ✅ | ✅ |
+| Cloudflare Pages → Edit | ❌ Not needed | — |
 
 ## After successful deploy
 
-1. Site URL: `https://kvr-hospital-web.pages.dev`
-2. Cloudflare → Workers & Pages → **kvr-hospital-web** → Custom domains
-3. Add: `kvrhospitals.com` and `www.kvrhospitals.com`
+1. Site URL: `https://kvr-hospitals.<your-subdomain>.workers.dev`
+2. Cloudflare → Workers & Pages → **kvr-hospitals** → Settings → Domains & Routes
+3. Add custom domain: `kvrhospitals.com` and `www.kvrhospitals.com`
 
 ## Meta privacy policy URL
 
