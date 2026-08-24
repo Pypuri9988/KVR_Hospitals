@@ -18,6 +18,7 @@ jobs:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       PAGES_PROJECT: kvr-hospitals
+      CUSTOM_DOMAIN: kvrhospitals.com
     steps:
       - uses: actions/checkout@v4
 
@@ -41,7 +42,28 @@ jobs:
       - name: Deploy to Cloudflare Pages
         run: npx wrangler pages deploy dist --project-name="$PAGES_PROJECT" --branch=main 2>&1 | tee deploy.log
 
+      - name: Attach custom domains
+        run: |
+          api="https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects/${PAGES_PROJECT}/domains"
+          for domain in "$CUSTOM_DOMAIN" "www.$CUSTOM_DOMAIN"; do
+            echo "Adding domain: $domain"
+            resp=$(curl -sS -X POST "$api" \
+              -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+              -H "Content-Type: application/json" \
+              --data "{\"name\":\"${domain}\"}")
+            echo "$resp"
+            if echo "$resp" | grep -q '"success":true'; then
+              echo "✅ $domain attached"
+            elif echo "$resp" | grep -qi "already exists"; then
+              echo "ℹ️ $domain already attached"
+            else
+              echo "::warning::Could not attach $domain — add manually in Cloudflare dashboard if needed"
+            fi
+          done
+
       - name: Publish deploy URL
         run: |
-          echo "### Cloudflare Pages deploy" >> $GITHUB_STEP_SUMMARY
-          grep -E "pages.dev|Deployed|https://" deploy.log >> $GITHUB_STEP_SUMMARY || tail -20 deploy.log >> $GITHUB_STEP_SUMMARY
+          echo "### Deploy" >> $GITHUB_STEP_SUMMARY
+          echo "- Pages: https://${PAGES_PROJECT}.pages.dev" >> $GITHUB_STEP_SUMMARY
+          echo "- Custom: https://${CUSTOM_DOMAIN}" >> $GITHUB_STEP_SUMMARY
+          grep -E "pages.dev|Deployed|https://" deploy.log >> $GITHUB_STEP_SUMMARY 2>/dev/null || true
