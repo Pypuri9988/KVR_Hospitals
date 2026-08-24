@@ -34,10 +34,9 @@ jobs:
           test -n "$CLOUDFLARE_API_TOKEN" || (echo "::error::Missing CLOUDFLARE_API_TOKEN secret" && exit 1)
           test -n "$CLOUDFLARE_ACCOUNT_ID" || (echo "::error::Missing CLOUDFLARE_ACCOUNT_ID secret" && exit 1)
 
-      - name: Create Pages project if needed
-        run: |
-          npx wrangler pages project list
-          npx wrangler pages project create "$PAGES_PROJECT" --production-branch=main || echo "Project may already exist"
+      - name: Create Pages project (first deploy only)
+        continue-on-error: true
+        run: npx wrangler pages project create "$PAGES_PROJECT" --production-branch=main
 
       - name: Deploy to Cloudflare Pages
-        run: npx wrangler pages deploy dist --project-name="$PAGES_PROJECT" --branch=main
+        run: npx wrangler pages deploy dist --project-name="$PAGES_PROJECT" --branch=main --commit-dirty=true
