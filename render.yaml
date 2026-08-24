@@ -1,0 +1,27 @@
+# WhatsApp bot API — free tier at render.com
+# After deploy: add CNAME api.kvrhospitals.com → your-app.onrender.com
+services:
+  - type: web
+    name: kvr-whatsapp-api
+    runtime: node
+    rootDir: whatsapp-server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: META_VERIFY_TOKEN
+        sync: false
+      - key: META_ACCESS_TOKEN
+        sync: false
+      - key: META_PHONE_NUMBER_ID
+        sync: false
+      - key: META_WABA_ID
+        sync: false
+      - key: DOCTOR_ALERT_PHONE
+        value: "919491135557"
+      - key: PORT
+        value: "8787"
+      - key: WEBHOOK_PATH
+        value: "/webhook"
