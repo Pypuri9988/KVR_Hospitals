@@ -3,6 +3,15 @@
 **Domain:** kvrhospitals.com  
 **Stack:** Ubuntu VM + Nginx + Node (WhatsApp bot) + Let's Encrypt SSL
 
+## Login URLs
+
+| Service | URL |
+|---------|-----|
+| Oracle signup (free) | https://www.oracle.com/cloud/free/ |
+| Oracle console login | https://cloud.oracle.com/ |
+| Cloudflare DNS | https://dash.cloudflare.com/ |
+| GitHub repo | https://github.com/Pypuri9988/KVR_Hospitals |
+
 ---
 
 ## Part 1 — Create free Oracle VM (one time)
@@ -162,11 +171,13 @@ Or push to GitHub and pull on server if you prefer git-based deploy.
 
 ## Oracle vs Cloudflare Pages
 
-| | Cloudflare Pages | Oracle VM |
-|--|------------------|-----------|
-| Cost | Free | Free tier |
-| WhatsApp API | Needs Render/separate | Same server |
-| SSL | Automatic | Certbot |
-| You manage | Less | SSH + updates |
+Cloudflare Pages is **not used**. Only Cloudflare **DNS** (A records to Oracle IP).
+
+| | Oracle VM (this setup) |
+|--|------------------------|
+| Cost | Free tier |
+| Website + WhatsApp API | Same server |
+| SSL | Certbot |
+| Deploy | SSH from Cursor or GitHub Actions |
 
 You can keep Cloudflare **DNS only** (grey cloud A records) pointing to Oracle IP.

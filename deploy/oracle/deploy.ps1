@@ -4,9 +4,11 @@ param(
     [Parameter(Mandatory = $false)]
     [string]$ServerIp,
 
-    [string]$User = "ubuntu",
+    [string]$User = "",
 
     [string]$SshKey = "",
+
+    [switch]$OracleLinux,
 
     [switch]$SkipBuild,
 
@@ -24,15 +26,22 @@ if (Test-Path $EnvFile) {
             $val = $matches[2].Trim()
             switch ($name) {
                 "SERVER_IP" { if (-not $ServerIp) { $ServerIp = $val } }
-                "SERVER_USER" { if ($User -eq "ubuntu") { $User = $val } }
+                "SERVER_USER" { if (-not $User) { $User = $val } }
                 "SSH_KEY" { if (-not $SshKey) { $SshKey = $val } }
             }
         }
     }
 }
 
+if (-not $User) {
+    $User = if ($OracleLinux) { "opc" } else { "ubuntu" }
+}
+
+$setupScript = if ($OracleLinux) { "setup-server-oracle-linux.sh" } else { "setup-server.sh" }
+$webGroup = if ($OracleLinux) { "nginx" } else { "www-data" }
+
 if (-not $ServerIp) {
-    Write-Host "Usage: .\deploy\oracle\deploy.ps1 -ServerIp YOUR_ORACLE_PUBLIC_IP" -ForegroundColor Yellow
+    Write-Host "Usage: .\deploy\oracle\deploy.ps1 -ServerIp YOUR_ORACLE_PUBLIC_IP -OracleLinux" -ForegroundColor Yellow
     Write-Host "Or create deploy\oracle\.env.deploy from .env.deploy.example"
     exit 1
 }
@@ -58,7 +67,7 @@ Write-Host "==> Target: $target" -ForegroundColor Cyan
 if ($SetupOnly) {
     Write-Host "==> Uploading nginx config + running setup on server..."
     Invoke-Scp (Join-Path $PSScriptRoot "nginx-kvrhospitals.conf") "/tmp/kvr-nginx.conf"
-    Invoke-Scp (Join-Path $PSScriptRoot "setup-server.sh") "/tmp/setup-server.sh"
+    Invoke-Scp (Join-Path $PSScriptRoot $setupScript) "/tmp/setup-server.sh"
     Invoke-Ssh "bash /tmp/setup-server.sh"
     Write-Host "✅ Server setup done. Add DNS A records, then run deploy again without -SetupOnly"
     exit 0
@@ -95,7 +104,7 @@ pm2 save
 sudo env PATH=`$PATH:/usr/bin pm2 startup systemd -u $User --hp /home/$User | tail -1 | bash || true
 "@
 
-Invoke-Ssh "sudo chown -R ${User}:www-data /var/www/kvrhospitals && sudo systemctl reload nginx"
+Invoke-Ssh "sudo chown -R ${User}:${webGroup} /var/www/kvrhospitals && sudo systemctl reload nginx"
 
 Write-Host ""
 Write-Host "✅ Deploy complete!" -ForegroundColor Green
