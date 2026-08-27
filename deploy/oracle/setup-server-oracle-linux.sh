@@ -16,7 +16,6 @@ if [ ! -f /swapfile ]; then
   grep -q '/swapfile' /etc/fstab || echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 fi
 
-sudo dnf update -y
 sudo dnf install -y nginx git curl firewalld
 
 # Certbot (EPEL)
