@@ -15,6 +15,9 @@ whatsapp-server/.env
 *.key
 *.p12
 
+# Deploy secrets (local only)
+deploy/oracle/.env.deploy
+
 # Logs
 logs/
 *.log
