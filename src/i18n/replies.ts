@@ -39,6 +39,9 @@ const enPatterns: Record<string, RegExp[]> = {
   doctor: [/\b(doctor|physician|satish|naga|who)\b/i],
   diabetes: [/\b(diabetes|sugar|fatty|liver|metabolic|obesity|thyroid|bp|pressure|cholesterol)\b/i],
   fever: [/\b(fever|typhoid|dengue|infection|jvara)\b/i],
+  conditions: [/\b(conditions|treat|diabetes|sugar|fatty|liver|metabolic|obesity|thyroid|bp|pressure|cholesterol)\b/i],
+  timingsFees: [/\b(timings?\s*&\s*fees?|fees?|cost|price|charges?)\b/i],
+  medicine: [/\b(medicine delivery|medicine|medication|prescription delivery|pharmacy)\b/i],
   callback: [/\b(callback|call back|call me)\b/i],
   whatsapp: [/\b(whatsapp|chat)\b/i],
   thanks: [/\b(thanks|thank you|bye|dhanyavadam)\b/i],
@@ -57,6 +60,9 @@ const tePatterns: Record<string, RegExp[]> = {
   doctor: [/డాక్టర్|doctor|satish|naga|physician/i],
   diabetes: [/డయాబెటిస్|diabetes|షుగర్|sugar|fatty|liver|obesity|bp|pressure|thyroid/i],
   fever: [/జ్వరం|fever|typhoid|dengue|dengue|infection/i],
+  conditions: [/conditions|diabetes|డయాబెటిస్|షుగర్|fatty|liver|obesity|bp|pressure|thyroid/i],
+  timingsFees: [/fees|charges|cost|price|టైమింగ్.*fee/i],
+  medicine: [/medicine delivery|medicine|medication|prescription|pharmacy/i],
   callback: [/కాల్ బ్యాక్|callback|call back|call me/i],
   whatsapp: [/whatsapp|వాట్సాప్|chat/i],
   thanks: [/ధన్యవాద|thanks|thank you|bye/i],
@@ -71,6 +77,13 @@ export function replyForInput(lang: Lang, input: string): BotReply {
   for (const [key, regexes] of Object.entries(patterns)) {
     if (regexes.some((r) => r.test(q))) {
       if (key === "book" && /assessment|preventive|package|అssesment|ప్యాకేజ/i.test(q)) continue;
+      if (key === "timings" && /fees?|cost|price|charges?/i.test(q)) return getReplyByKey(lang, "timingsFees");
+      if (/home visit|visit home|senior visit|doctor home|homevisit/i.test(q)) {
+        return getReplyByKey(lang, "noHomeVisit");
+      }
+      if (/home sample|sample pickup|sample collection|lab sample|blood test pickup/i.test(q)) {
+        return getReplyByKey(lang, "sample");
+      }
       return getReplyByKey(lang, key);
     }
   }

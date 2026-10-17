@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import { handleIncomingMessage, handleWebsiteBooking } from "./bot.js";
+import { BOOKING_STAFF_PHONE, CLINIC_BOT_PHONE_DEFAULT } from "./config.js";
 
 const app = express();
 app.use(express.json());
@@ -9,7 +10,7 @@ const PORT = process.env.PORT || 8787;
 const VERIFY_TOKEN = process.env.META_VERIFY_TOKEN || "change_me_kvr_webhook_verify";
 const TOKEN = process.env.META_ACCESS_TOKEN || "";
 const PHONE_NUMBER_ID = process.env.META_PHONE_NUMBER_ID || "";
-const DOCTOR_ALERT_PHONE = (process.env.DOCTOR_ALERT_PHONE || "919491135557").replace(/\D/g, "");
+const CLINIC_BOT_PHONE = (process.env.CLINIC_PHONE || CLINIC_BOT_PHONE_DEFAULT).replace(/\D/g, "");
 const WEBHOOK_PATH = process.env.WEBHOOK_PATH || "/webhook";
 
 app.get("/health", (_req, res) => {
@@ -40,22 +41,45 @@ app.post(WEBHOOK_PATH, async (req, res) => {
     const entry = req.body?.entry?.[0];
     const change = entry?.changes?.[0];
     const value = change?.value;
+    const statuses = value?.statuses;
+    if (statuses?.length) {
+      for (const st of statuses) {
+        const err = st.errors?.[0];
+        console.log(
+          `Message status: ${st.status} to +${st.recipient_id} id=${st.id}` +
+            (err ? ` error=${err.code} ${err.title || ""} ${err.message || ""}` : ""),
+        );
+      }
+      return;
+    }
+
     const messages = value?.messages;
-    if (!messages?.length) return;
+    if (!messages?.length) {
+      console.log("Webhook received (no messages):", change?.field || "unknown");
+      return;
+    }
 
     for (const msg of messages) {
       const from = msg.from;
       const contactName = value?.contacts?.[0]?.profile?.name || "";
       let text = msg.text?.body || "";
       let buttonId = msg.interactive?.button_reply?.id || msg.interactive?.list_reply?.id || "";
+      const mediaId =
+        msg.image?.id ||
+        (msg.document?.mime_type?.startsWith("image/") ? msg.document.id : "") ||
+        "";
+      console.log(
+        `Incoming from ${from}: text="${text}" button="${buttonId}"${mediaId ? ` media=${mediaId}` : ""}`,
+      );
 
       await handleIncomingMessage({
         from,
         text,
         buttonId,
+        mediaId,
         phoneNumberId: PHONE_NUMBER_ID,
         token: TOKEN,
-        doctorAlertPhone: DOCTOR_ALERT_PHONE,
+        botPhone: CLINIC_BOT_PHONE,
         contactName,
       });
     }
@@ -82,7 +106,7 @@ app.post("/api/booking", async (req, res) => {
       notes: notes || "",
       phoneNumberId: PHONE_NUMBER_ID,
       token: TOKEN,
-      doctorAlertPhone: DOCTOR_ALERT_PHONE,
+      botPhone: CLINIC_BOT_PHONE,
     });
 
     res.json({ ok: true });
@@ -95,5 +119,7 @@ app.post("/api/booking", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`KVR WhatsApp server on http://localhost:${PORT}`);
   console.log(`Webhook: GET/POST ${WEBHOOK_PATH}`);
+  console.log(`Bot line: +${CLINIC_BOT_PHONE}`);
+  console.log(`Booking confirm alerts → +${BOOKING_STAFF_PHONE} (staff)`);
   if (!TOKEN) console.warn("Set META_ACCESS_TOKEN in whatsapp-server/.env");
 });

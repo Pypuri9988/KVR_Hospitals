@@ -1,122 +1,88 @@
 import { motion } from "framer-motion";
-import { CheckCircle2, MapPin, Phone, Sparkles } from "lucide-react";
+import { Award, CheckCircle2, Clock3, MapPin, Phone, Star } from "lucide-react";
 import WhatsAppIcon from "./WhatsAppIcon";
-import { clinic, waLink, whatsappUrlFor } from "../config";
+import { clinic, whatsappUrlFor } from "../config";
 import { useLanguage } from "../i18n/LanguageContext";
+import { useSite } from "../i18n/useSite";
 
 export default function HeroSection() {
   const { lang } = useLanguage();
+  const s = useSite();
   const whatsappUrl = whatsappUrlFor(lang);
 
   return (
-    <section className="hero-sitara" id="top-hero">
+    <section className="hero-premium" id="top-hero">
       <div
-        className="hero-sitara-bg"
+        className="hero-premium-bg"
         style={{ backgroundImage: `url(${clinic.images.hospitalHero})` }}
         aria-hidden="true"
       />
-      <div className="hero-sitara-overlay" aria-hidden="true" />
+      <div className="hero-premium-overlay" aria-hidden="true" />
+      <div className="hero-premium-glow" aria-hidden="true" />
 
-      <div className="container hero-sitara-grid">
+      <div className="container hero-premium-inner">
         <motion.div
-          className="hero-sitara-copy"
-          initial={{ opacity: 0, y: 18 }}
+          className="hero-premium-copy"
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.65, ease: "easeOut" }}
         >
-          <div className="hero-location-pill">
-            {clinic.location.city}, {clinic.location.state} · Walk-ins welcome
+          <div className="hero-rating-pill">
+            <Star size={14} fill="currentColor" />
+            <strong>{clinic.reviews.justdial.rating}</strong>
+            <span>{s.hero.rating}</span>
           </div>
+
+          <p className="hero-premium-eyebrow">
+            <Award size={16} />
+            {s.hero.centre}
+          </p>
 
           <h1>
-            Medicine that treats <span className="hero-accent">you</span> — not just your{" "}
-            <span className="hero-accent">numbers</span>.
+            {s.hero.titleBefore}<em>{s.hero.titleHighlight}</em>{s.hero.titleAfter}
           </h1>
-          <p className="hero-sitara-lead">{clinic.subtagline}</p>
 
-          <ul className="hero-sitara-points">
-            <li>
-              <CheckCircle2 size={16} /> No appointment needed for first visit
-            </li>
-            <li>
-              <CheckCircle2 size={16} /> Diabetes · Fatty liver · Metabolic care
-            </li>
+          <p className="hero-premium-lead">{s.hero.lead}</p>
+
+          <ul className="hero-premium-points">
+            <li><CheckCircle2 size={17} /> {s.hero.point1}</li>
+            <li><CheckCircle2 size={17} /> {s.hero.point2}</li>
+            <li><CheckCircle2 size={17} /> {s.hero.point3}</li>
           </ul>
 
-          <div className="hero-promo-banner">
-            <span className="hero-promo-new">
-              <Sparkles size={13} /> NEW
-            </span>
-            <div className="hero-promo-text">
-              <strong>Body Composition Analysis</strong>
-              <span>Body fat, muscle & metabolic age — 60-second scan</span>
-            </div>
-            <a
-              className="hero-promo-btn"
-              href={waLink("Book Body Composition Analysis")}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Book now
+          <div className="hero-premium-actions">
+            <a className="btn btn-gold btn-lg" href="#book">{s.hero.book}</a>
+            <a className="btn btn-whatsapp btn-lg" href={whatsappUrl} target="_blank" rel="noreferrer">
+              <WhatsAppIcon size={20} />
+              {s.hero.whatsapp}
             </a>
           </div>
 
-          <div className="hero-sitara-actions">
-            <a className="btn btn-primary btn-lg" href="#assessments">
-              {clinic.ctaPrimary}
-            </a>
-            <a className="btn btn-whatsapp btn-lg" href={whatsappUrl} target="_blank" rel="noreferrer">
-              <WhatsAppIcon size={20} />
-              {clinic.ctaSecondary}
-            </a>
-            <a className="btn btn-ghost-light btn-lg" href={`tel:${clinic.phoneRaw}`}>
-              <Phone size={18} />
-              {clinic.phone}
-            </a>
+          <div className="hero-premium-contact">
+            <span><Phone size={15} /> {clinic.phone}</span>
+            <span><Clock3 size={15} /> {s.nav.hoursLine}</span>
+            <span><MapPin size={15} /> {s.hero.location}</span>
           </div>
         </motion.div>
 
         <motion.div
-          className="hero-sitara-visual"
-          initial={{ opacity: 0, x: 20 }}
+          className="hero-premium-visual"
+          initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.55, delay: 0.08 }}
+          transition={{ duration: 0.7, delay: 0.12, ease: "easeOut" }}
         >
-          <div className="hero-profile-card">
-            <div className="hero-profile-photo">
-              <img
-                src={clinic.images.doctorScrubs}
-                alt={clinic.doctor.name}
-                width={480}
-                height={520}
-              />
+          <div className="hero-doctor-frame">
+            <div className="hero-doctor-frame-border" aria-hidden="true" />
+            <div className="hero-doctor-photo-wrap">
+              <img src={clinic.images.doctorScrubs} alt={clinic.doctor.name} width={520} height={620} />
             </div>
-            <div className="hero-profile-body">
-              <h3>{clinic.doctor.name}</h3>
-              <p className="hero-profile-specialty">Internal Medicine</p>
-              <div className="hero-profile-creds">
-                <div className="hero-profile-cred">
-                  <strong>MD</strong>
-                  <span>Internal Medicine</span>
-                </div>
-                <div className="hero-profile-cred">
-                  <strong>MBBS</strong>
-                  <span>Physician</span>
-                </div>
-                <div className="hero-profile-cred">
-                  <strong>10+ Years</strong>
-                  <span>Clinical Practice</span>
-                </div>
-                <div className="hero-profile-cred">
-                  <strong>BCA</strong>
-                  <span>On-site diagnostics</span>
-                </div>
-              </div>
-              <div className="hero-profile-footer">
-                <MapPin size={16} />
-                <span>
-                  {clinic.name}, {clinic.location.city}, {clinic.location.state}
-                </span>
+            <div className="hero-doctor-plaque">
+              <p className="hero-doctor-plaque-label">{s.hero.physicianLabel}</p>
+              <h2>{clinic.doctor.shortName}</h2>
+              <p>{clinic.doctor.qualifications}</p>
+              <div className="hero-doctor-plaque-tags">
+                <span>{s.hero.experience}</span>
+                <span>{s.hero.specialty}</span>
               </div>
             </div>
           </div>

@@ -1,72 +1,78 @@
-import { motion } from "framer-motion";
-import type { CSSProperties } from "react";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { Activity, ArrowRight, Building2, Eye, HeartPulse, MapPin } from "lucide-react";
 import { clinic } from "../config";
-import { diagVisuals } from "./graphics/DiagVisuals";
+import { useSite } from "../i18n/useSite";
+import DiagnosticsEquipmentCarousel from "./DiagnosticsEquipmentCarousel";
+import SectionBackdrop from "./SectionBackdrop";
 
-const cardThemes = {
-  bca: { glow: "#1565b8", badge: "60-second scan" },
-  fundus: { glow: "#ea580c", badge: "Retinal screening" },
-  echo: { glow: "#0d7a6e", badge: "Cardiac ultrasound" },
+const perkIcons = {
+  fundus: Eye,
+  bca: Activity,
+  echo: HeartPulse,
 } as const;
 
 export default function DiagnosticsSection() {
+  const s = useSite();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeSlide = clinic.diagnosticPromoSlides[activeIndex];
+  const activeId = activeSlide?.diagnosticId;
+  const activeCopy = activeId ? s.diagnostics.items[activeId] : null;
+
   return (
-    <section className="section diag-showcase" id="diagnostics">
-      <div className="container">
-        <div className="section-head">
+    <section className="section diag-showcase section-photo-band" id="diagnostics">
+      <SectionBackdrop scene="facilities" />
+      <div className="container section-content-layer">
+        <div className="section-head diag-showcase-head">
           <div className="section-label">
-            <Sparkles size={14} /> On-Site Diagnostics
+            <Building2 size={15} aria-hidden="true" />
+            {s.diagnostics.label}
           </div>
-          <h2>Advanced tools for preventive assessment</h2>
-          <p>Interactive, clinic-grade diagnostics — animated insights into what each test reveals for your health.</p>
+          <h2>{s.diagnostics.title}</h2>
+          <p className="diag-showcase-lead">{s.diagnostics.subtitle}</p>
         </div>
 
-        <div className="diag-showcase-grid">
-          {clinic.diagnostics.map((d, i) => {
-            const Viz = diagVisuals[d.id as keyof typeof diagVisuals];
-            const theme = cardThemes[d.id as keyof typeof cardThemes];
+        <div className="diag-unified diag-sitara-layout">
+          <DiagnosticsEquipmentCarousel onIndexChange={setActiveIndex} />
 
-            return (
-              <motion.article
-                className={`diag-showcase-card diag-showcase-${d.id}`}
-                key={d.id}
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.5, delay: i * 0.12 }}
-                whileHover={{ y: -6 }}
-              >
-                <div className="diag-showcase-visual" style={{ "--diag-glow": theme.glow } as CSSProperties}>
-                  <div className="diag-showcase-visual-bg" aria-hidden="true" />
-                  <div className="diag-showcase-badge">{theme.badge}</div>
-                  {Viz && <Viz />}
-                  <div className="diag-showcase-shimmer" aria-hidden="true" />
-                </div>
+          <aside className="diag-sitara-info">
+            <p className="diag-on-site">
+              <MapPin size={16} aria-hidden="true" />
+              {s.diagnostics.items.fundus.onSite}
+            </p>
 
-                <div className="diag-showcase-body">
-                  <span className="diag-short">{d.short}</span>
-                  <h3>{d.title}</h3>
-                  <p>{d.description}</p>
-                  <div className="diag-tags">
-                    {d.metrics.map((m) => (
-                      <motion.span
-                        key={m}
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ type: "spring", stiffness: 400 }}
-                      >
-                        {m}
-                      </motion.span>
-                    ))}
-                  </div>
-                  <a className="diag-showcase-link" href="#book">
-                    Book this test
-                    <ArrowRight size={16} />
-                  </a>
+            <div className="diag-sitara-perks">
+              {clinic.diagnostics.map((d) => {
+                const copy = s.diagnostics.items[d.id];
+                if (!copy) return null;
+                const Icon = perkIcons[d.id as keyof typeof perkIcons] ?? Activity;
+                return (
+                  <article className={`diag-sitara-perk${d.id === activeId ? " is-active" : ""}`} key={d.id}>
+                    <span className="diag-sitara-perk-icon">
+                      <Icon size={20} strokeWidth={2} />
+                    </span>
+                    <h3>{copy.short}</h3>
+                    <p>{copy.summaryLine}</p>
+                  </article>
+                );
+              })}
+            </div>
+
+            {activeCopy && (
+              <div className="diag-sitara-metrics">
+                <p className="diag-sitara-metrics-label">{s.diagnostics.metricsHeading}</p>
+                <div className="diag-sitara-metric-pills">
+                  {activeCopy.metrics.map((m) => (
+                    <span key={m}>{m}</span>
+                  ))}
                 </div>
-              </motion.article>
-            );
-          })}
+              </div>
+            )}
+
+            <a className="btn btn-gold diag-sitara-cta" href="#book">
+              {s.diagnostics.bookTest}
+              <ArrowRight size={16} aria-hidden="true" />
+            </a>
+          </aside>
         </div>
       </div>
     </section>

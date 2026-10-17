@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import {
   Activity,
   Bot,
@@ -9,6 +9,7 @@ import {
   MapPin,
   MessageCircle,
   PhoneCall,
+  Pill,
   Stethoscope,
   Thermometer,
   X,
@@ -19,6 +20,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import { clinic, waLink } from "../config";
 import { useLanguage } from "../i18n/LanguageContext";
 import { getWhatsappHubOptions, translations, type CareOption } from "../i18n/translations";
+import { CALLBACK_EVENT, CHATBOT_EVENT } from "../utils/callbackModal";
 
 const actionIcons = {
   whatsapp: WhatsAppIcon,
@@ -32,6 +34,15 @@ const actionIcons = {
   phone: PhoneCall,
   clipboard: Stethoscope,
   thermometer: Thermometer,
+  pill: Pill,
+};
+
+const hubIconTone: Record<string, string> = {
+  chat: "green",
+  consult: "teal",
+  sample: "orange",
+  medicine: "purple",
+  bot: "brand",
 };
 
 type FloatActionsProps = {
@@ -55,8 +66,23 @@ export default function FloatActions({ onRequestCallback }: FloatActionsProps) {
     setCallbackOpen(true);
     setDone(false);
     setWaOpen(false);
+    setChatOpen(false);
     onRequestCallback?.();
   }
+
+  useEffect(() => {
+    const onCallback = () => openCallback();
+    const onChatbot = () => {
+      setChatOpen(true);
+      setWaOpen(false);
+    };
+    window.addEventListener(CALLBACK_EVENT, onCallback);
+    window.addEventListener(CHATBOT_EVENT, onChatbot);
+    return () => {
+      window.removeEventListener(CALLBACK_EVENT, onCallback);
+      window.removeEventListener(CHATBOT_EVENT, onChatbot);
+    };
+  });
 
   function submitCallback(e: FormEvent) {
     e.preventDefault();
@@ -85,7 +111,9 @@ export default function FloatActions({ onRequestCallback }: FloatActionsProps) {
 
   return (
     <>
-      <div className="float-stack">
+      <div
+        className={`float-stack${waOpen ? " is-wa-open" : ""}${chatOpen ? " is-chat-open" : ""}${callbackOpen ? " is-modal-open" : ""}`}
+      >
         {chatOpen && (
           <Chatbot
             open={chatOpen}
@@ -110,8 +138,9 @@ export default function FloatActions({ onRequestCallback }: FloatActionsProps) {
             </div>
             <div className="wa-hub-list">
               {whatsappHubOptions.map((action) => {
-                const Icon = actionIcons[action.icon] ?? MessageCircle;
+                const Icon = actionIcons[action.icon as keyof typeof actionIcons] ?? MessageCircle;
                 const isWa = action.icon === "whatsapp";
+                const tone = hubIconTone[action.id] ?? "teal";
                 return (
                   <button
                     key={action.id}
@@ -119,7 +148,7 @@ export default function FloatActions({ onRequestCallback }: FloatActionsProps) {
                     className="wa-hub-item"
                     onClick={() => handleAction(action)}
                   >
-                    <span className={`wa-hub-icon ${isWa ? "wa-hub-icon-green" : ""}`}>
+                    <span className={`wa-hub-icon wa-hub-icon-${tone}`}>
                       {isWa ? <WhatsAppIcon size={20} /> : <Icon size={20} />}
                     </span>
                     <span className="wa-hub-text">
@@ -133,13 +162,16 @@ export default function FloatActions({ onRequestCallback }: FloatActionsProps) {
           </div>
         )}
 
-        <button className="float-btn float-callback" onClick={openCallback}>
-          <PhoneCall size={18} />
-          <span>{t.float.callback}</span>
+        <button className="float-btn float-pro float-callback" type="button" onClick={openCallback}>
+          <span className="float-pro-icon" aria-hidden="true">
+            <PhoneCall size={18} />
+          </span>
+          <span className="float-pro-text">{t.float.callback}</span>
         </button>
 
         <button
-          className={`float-btn float-whatsapp pulse ${waOpen ? "active" : ""}`}
+          type="button"
+          className={`float-btn float-pro float-whatsapp ${waOpen ? "active" : ""}`}
           onClick={() => {
             setWaOpen((v) => !v);
             setChatOpen(false);
@@ -147,19 +179,25 @@ export default function FloatActions({ onRequestCallback }: FloatActionsProps) {
           aria-expanded={waOpen}
           aria-label={t.float.whatsapp}
         >
-          <WhatsAppIcon size={22} />
-          <span>{t.float.whatsapp}</span>
+          <span className="float-pro-icon float-pro-icon-wa" aria-hidden="true">
+            <WhatsAppIcon size={18} />
+          </span>
+          <span className="float-pro-text">{t.float.whatsapp}</span>
         </button>
 
         <button
-          className="float-btn float-chat icon-only"
+          type="button"
+          className={`float-btn float-pro float-bot ${chatOpen ? "active" : ""}`}
           onClick={() => {
             setChatOpen((v) => !v);
             setWaOpen(false);
           }}
           aria-label={t.bot.title}
         >
-          {chatOpen ? <X size={22} /> : <Bot size={22} />}
+          <span className="float-pro-icon float-pro-icon-bot" aria-hidden="true">
+            <Bot size={18} />
+          </span>
+          <span className="float-pro-text">{t.bot.title}</span>
         </button>
       </div>
 

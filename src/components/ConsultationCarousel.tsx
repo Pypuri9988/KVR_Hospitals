@@ -2,10 +2,15 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { clinic } from "../config";
-
-const slides = clinic.consultationSlides;
+import { useSite } from "../i18n/useSite";
 
 export default function ConsultationCarousel() {
+  const s = useSite();
+  const slides = clinic.consultationSlides.map((slide, i) => ({
+    ...slide,
+    title: s.slides[i]?.title ?? slide.title,
+    caption: s.slides[i]?.caption ?? slide.caption,
+  }));
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -13,7 +18,7 @@ export default function ConsultationCarousel() {
       setIndex((i) => (i + 1) % slides.length);
     }, 5500);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
   function go(dir: -1 | 1) {
     setIndex((i) => (i + dir + slides.length) % slides.length);
@@ -49,12 +54,12 @@ export default function ConsultationCarousel() {
       </button>
 
       <div className="carousel-dots">
-        {slides.map((s, i) => (
+        {slides.map((slide, i) => (
           <button
-            key={s.title}
+            key={slide.title}
             className={`carousel-dot ${i === index ? "active" : ""}`}
             onClick={() => setIndex(i)}
-            aria-label={`Go to ${s.title}`}
+            aria-label={`Go to ${slide.title}`}
           />
         ))}
       </div>

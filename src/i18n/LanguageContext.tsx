@@ -18,7 +18,7 @@ function readStoredLang(): Lang {
   } catch {
     /* ignore */
   }
-  return "en";
+  return "te";
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {

@@ -8,6 +8,7 @@ import {
   Heart,
   MapPin,
   PhoneCall,
+  Pill,
   Send,
   Stethoscope,
   Thermometer,
@@ -34,6 +35,7 @@ const menuIcons = {
   phone: PhoneCall,
   clipboard: Stethoscope,
   thermometer: Thermometer,
+  pill: Pill,
 };
 
 export default function Chatbot({

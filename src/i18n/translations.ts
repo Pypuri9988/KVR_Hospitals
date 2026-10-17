@@ -21,7 +21,8 @@ export type CareOption = {
     | "map"
     | "phone"
     | "clipboard"
-    | "thermometer";
+    | "thermometer"
+    | "pill";
   action?: "chatbot" | "callback" | "link";
   href?: string;
   botPrompt?: string;
@@ -37,9 +38,12 @@ export type TranslationBundle = {
     consult: string;
     consultSub: string;
     consultMsg: string;
-    assessment: string;
-    assessmentSub: string;
-    assessmentMsg: string;
+    sample: string;
+    sampleSub: string;
+    sampleMsg: string;
+    medicine: string;
+    medicineSub: string;
+    medicineMsg: string;
     bot: string;
     botSub: string;
     waBar: string;
@@ -50,16 +54,11 @@ export type TranslationBundle = {
     menuTitle: string;
     greeting: string;
     placeholder: string;
-    bookAppointment: string;
-    timings: string;
-    bodyComposition: string;
-    echo: string;
-    fundus: string;
-    location: string;
     consultation: string;
-    healthAssessment: string;
-    feverCare: string;
-    callback: string;
+    directions: string;
+    timingsFees: string;
+    conditions: string;
+    chatWhatsApp: string;
     langSwitch: string;
   };
   replies: Record<
@@ -103,10 +102,14 @@ export const translations: Record<Lang, TranslationBundle> = {
       consultSub: "Physician visit",
       consultMsg:
         "Hello, I would like to book a consultation with Dr. Naga Satish Kumar Kota at KVR Hospital.",
-      assessment: "Book health assessment",
-      assessmentSub: "Preventive health packages",
-      assessmentMsg:
-        "Hello, I would like to book a Preventive Health Assessment at KVR Hospital.",
+      sample: "Home sample pickup",
+      sampleSub: "Lab sample collection at home",
+      sampleMsg:
+        "Hello KVR Hospital, I would like home sample collection. Patient name, tests needed, address and preferred time are below.",
+      medicine: "Medicine delivery",
+      medicineSub: "Prescription medicines to home",
+      medicineMsg:
+        "Hello KVR Hospital, I would like medicine delivery at home. Please find my prescription details below.",
       bot: "Talk to KVR Care",
       botSub: "AI care assistant",
       waBar: "Chat on WhatsApp",
@@ -117,17 +120,12 @@ export const translations: Record<Lang, TranslationBundle> = {
       menuTitle: "How can we help?",
       greeting:
         "Hi! I'm KVR Care — your assistant for Dr. Naga Satish Kumar. Choose an option or type your question.",
-      placeholder: "Ask about care, tests, booking…",
-      bookAppointment: "Book appointment",
-      timings: "Timings",
-      bodyComposition: "Body composition",
-      echo: "2D Echo",
-      fundus: "Fundus camera",
-      location: "Location",
+      placeholder: "Ask about care, booking, timings…",
       consultation: "Book a consultation",
-      healthAssessment: "Health assessment",
-      feverCare: "Fever care",
-      callback: "Request callback",
+      directions: "Get directions",
+      timingsFees: "Timings & fees",
+      conditions: "Conditions treated",
+      chatWhatsApp: "Chat on WhatsApp",
       langSwitch: "Language",
     },
     replies: {
@@ -147,6 +145,17 @@ export const translations: Record<Lang, TranslationBundle> = {
           },
         ],
       },
+      sample: {
+        text: "Home sample collection — share patient name, tests needed, address and preferred time on WhatsApp.",
+        actions: [{ label: "Request sample pickup", waMsg: "Home sample collection request at KVR Hospital." }],
+      },
+      noHomeVisit: {
+        text: "Home doctor visits are not available. Please book a consultation at the hospital or request home sample pickup.",
+        actions: [
+          { label: "Consultation", waMsg: "Book a consultation with Dr. Naga Satish Kumar Kota at KVR Hospital." },
+          { label: "Sample pickup", waMsg: "Home sample collection request at KVR Hospital." },
+        ],
+      },
       assessment: {
         text: "Essential, Metabolic, Heart Risk and Full Preventive assessments — based on your age and risk.",
         actions: [
@@ -162,11 +171,11 @@ export const translations: Record<Lang, TranslationBundle> = {
         actions: [{ label: "Book BCA", waMsg: "Book Body Composition Analysis" }],
       },
       fundus: {
-        text: "Remidio fundus camera screens diabetic eye disease early — quick and non-invasive.",
+        text: "Remidio AI-assisted fundus camera — retinal screening for diabetic eye changes and other retinal abnormalities at an early stage.",
         actions: [{ label: "Ask on WhatsApp", waMsg: "Fundus camera screening enquiry" }],
       },
       echo: {
-        text: "2D Echo assesses heart function — useful for BP, diabetes and chest symptoms.",
+        text: "2D Echocardiography (2D Echo) — ultrasound to assess heart structure, pumping function and valves.",
         actions: [{ label: "Ask on WhatsApp", waMsg: "2D Echo enquiry" }],
       },
       location: {
@@ -174,7 +183,7 @@ export const translations: Record<Lang, TranslationBundle> = {
         actions: [{ label: "Get directions", anchor: "maps" }],
       },
       doctor: {
-        text: "Dr. Naga Satish Kumar Kota — MBBS, MD (Internal Medicine), 10+ years experience.",
+        text: "Dr. Naga Satish Kumar Kota — MD (General Medicine), Consultant Physician. Trained at INHS Asvini, Mumbai (AFMS).",
         actions: [{ label: "About doctor", anchor: "#doctor" }],
       },
       diabetes: {
@@ -185,6 +194,22 @@ export const translations: Record<Lang, TranslationBundle> = {
         text: "Evidence-based fever care: not every typhoid patient needs injections, and not every dengue patient needs platelet transfusion.",
         actions: [{ label: "Consult on WhatsApp", waMsg: "Fever consultation enquiry" }],
       },
+      conditions: {
+        text: "We treat diabetes, hypertension, obesity, fatty liver, thyroid disorders, fever/typhoid/dengue, and senior preventive care.",
+        actions: [
+          { label: "Book consultation", waMsg: "Book a consultation with Dr. Naga Satish Kumar Kota at KVR Hospital." },
+          { label: "View assessments", anchor: "#assessments" },
+        ],
+      },
+      timingsFees: {
+        text: "Mon – Sat: 9 AM – 8 PM. Walk-ins welcome. Consultation fees vary by visit type — ask on WhatsApp for details.",
+        actions: [{ label: "Get directions", anchor: "maps" }],
+      },
+      medicine: {
+        text: "Order prescription medicines for home delivery — send a prescription photo and delivery address on WhatsApp.",
+        actions: [{ label: "Medicine delivery", waMsg: "KVR Hospital — I would like medicine delivery at home." }],
+      },
+
       callback: {
         text: "Tap Request Callback on the orange button, or message us on WhatsApp with your number.",
         actions: [{ label: "WhatsApp", waMsg: "Please call me back" }],
@@ -209,7 +234,7 @@ export const translations: Record<Lang, TranslationBundle> = {
       submit: "Request Callback",
       thanks: "Thanks! Opening WhatsApp to confirm your callback.",
     },
-    float: { callback: "Request Callback", whatsapp: "WhatsApp" },
+    float: { callback: "Callback", whatsapp: "WhatsApp" },
     lang: { label: "Language", english: "English", telugu: "తెలుగు" },
     video: { unmute: "Unmute", mute: "Mute", badge: "Doctor message · KVR Hospital" },
   },
@@ -223,9 +248,14 @@ export const translations: Record<Lang, TranslationBundle> = {
       consultSub: "వైద్యుడి సందర్శన",
       consultMsg:
         "నమస్కారం, Dr. Naga Satish Kumar Kota గారితో KVR Hospital లో కన్సల్టేషన్ బుక్ చేయాలి.",
-      assessment: "ఆరోగ్య అంచనా బుక్ చేయండి",
-      assessmentSub: "నివారక ఆరోగ్య ప్యాకేజీలు",
-      assessmentMsg: "నమస్కారం, KVR Hospital లో నివారక ఆరోగ్య అంచనా బుక్ చేయాలి.",
+      sample: "మీ ఇంటి నుండే sample collection",
+      sampleSub: "మీ ఇంటి నుండే lab sample collection",
+      sampleMsg:
+        "నమస్కారం KVR Hospital, మీ ఇంటి నుండే sample collection కావాలి. రోగి పేరు, పరీక్షలు, చిరునామా, సమయం క్రింద పంపుతున్నాను.",
+      medicine: "మందుల order",
+      medicineSub: "Prescription ఆధారంగా మందులు order చేయండి",
+      medicineMsg:
+        "నమస్కారం KVR Hospital, మందుల order కావాలి. prescription వివరాలు క్రింద పంపుతున్నాను.",
       bot: "KVR Care తో మాట్లాడండి",
       botSub: "AI సహాయకుడు",
       waBar: "WhatsApp లో చాట్",
@@ -236,17 +266,12 @@ export const translations: Record<Lang, TranslationBundle> = {
       menuTitle: "మీకు ఏమి కావాలి?",
       greeting:
         "నమస్కారం! నేను KVR Care — Dr. Naga Satish Kumar గారి సహాయకుడిని. క్రింద ఎంపిక ఎంచుకోండి లేదా ప్రశ్న అడగండి.",
-      placeholder: "బుకింగ్, పరీక్షలు, టైమింగ్స్…",
-      bookAppointment: "అపాయింట్మెంట్ బుక్",
-      timings: "టైమింగ్స్",
-      bodyComposition: "శరీర కూర్పు విశ్లేషణ",
-      echo: "2D Echo",
-      fundus: "ఫండస్ కెమెరా",
-      location: "చిరునామా",
+      placeholder: "బుకింగ్, టైమింగ్స్, conditions…",
       consultation: "కన్సల్టేషన్ బుక్",
-      healthAssessment: "ఆరోగ్య అంచనా",
-      feverCare: "జ్వరం సంరక్షణ",
-      callback: "కాల్ బ్యాక్",
+      directions: "దిశలు",
+      timingsFees: "టైమింగ్స్ & fees",
+      conditions: "Conditions treated",
+      chatWhatsApp: "WhatsApp లో చాట్",
       langSwitch: "భాష",
     },
     replies: {
@@ -266,6 +291,28 @@ export const translations: Record<Lang, TranslationBundle> = {
           },
         ],
       },
+      sample: {
+        text: "మీ ఇంటి నుండే lab sample collection — రోగి పేరు, పరీక్షలు, చిరునామా, సమయం WhatsApp లో పంపండి.",
+        actions: [
+          {
+            label: "Sample collection",
+            waMsg: "KVR Hospital — మీ ఇంటి నుండే sample collection కావాలి.",
+          },
+        ],
+      },
+      noHomeVisit: {
+        text: "ఇంటి వైద్య సందర్శన అందుబాటులో లేదు. Consultation book చేయండి లేదా, మీ ఇంటి నుండే sample collection ఎంచుకోండి.",
+        actions: [
+          {
+            label: "Consultation",
+            waMsg: "Dr. Naga Satish Kumar Kota consultation book cheyali",
+          },
+          {
+            label: "Sample collection",
+            waMsg: "KVR Hospital — మీ ఇంటి నుండే sample collection",
+          },
+        ],
+      },
       assessment: {
         text: "Essential, Metabolic, Heart Risk, Full Preventive అంచనాలు — మీ వయస్సు & ప్రమాదం ప్రకారం.",
         actions: [
@@ -281,19 +328,19 @@ export const translations: Record<Lang, TranslationBundle> = {
         actions: [{ label: "BCA బుక్", waMsg: "Body Composition Analysis book చేయాలి" }],
       },
       fundus: {
-        text: "Remidio fundus camera — మధుమేహ కంటి వ్యాధి early screening.",
+        text: "Remidio AI-assisted fundus camera — మధుమేహ కంటి మార్పులు మరియు ఇతర retinal abnormalities ను ప్రారంభ దశలో గుర్తించడానికi retinal screening.",
         actions: [{ label: "WhatsApp అడగండి", waMsg: "Fundus camera screening enquiry" }],
       },
       echo: {
-        text: "2D Echo — BP, diabetes, chest symptoms కోసం heart function assessment.",
-        actions: [{ label: "WhatsApp అడగండి", waMsg: "2D Echo enquiry" }],
+        text: "2D Echocardiography (2D Echo) — గుండè నిర్మాణం, pumping function మరియu valves పరిశీలనకu ultrasound.",
+        actions: [{ label: "WhatsApp అడగండi", waMsg: "2D Echo enquiry" }],
       },
       location: {
         text: "KVR Hospital, Main Road, LIC Office beside, Ramachandrapuram, East Godavari 533255",
         actions: [{ label: "దిశలు", anchor: "maps" }],
       },
       doctor: {
-        text: "Dr. Naga Satish Kumar Kota — MBBS, MD (Internal Medicine), 10+ years అనుభవం.",
+        text: "Dr. Naga Satish Kumar Kota — MD (General Medicine), Consultant Physician. AFMS కింద Mumbai INHS Asvini లో PG శిక్షణ.",
         actions: [{ label: "డాక్టర్ గురించి", anchor: "#doctor" }],
       },
       diabetes: {
@@ -303,6 +350,21 @@ export const translations: Record<Lang, TranslationBundle> = {
       fever: {
         text: "Evidence-based fever care: ప్రతి typhoid patient కు injection అవసరం లేదు; dengue లో platelet transfusion అన్ని cases లో లేదు.",
         actions: [{ label: "WhatsApp consult", waMsg: "Fever consultation enquiry" }],
+      },
+      conditions: {
+        text: "Diabetes, hypertension, obesity, fatty liver, thyroid, fever/typhoid/dengue, senior preventive care treat చేస్తాము.",
+        actions: [
+          { label: "కన్సల్టేషన్ బుక్", waMsg: "Dr. Naga Satish Kumar Kota consultation book చేయాలి" },
+          { label: "అంచనాలు చూడండి", anchor: "#assessments" },
+        ],
+      },
+      timingsFees: {
+        text: "సోమ–శని: 9 AM – 8 PM. Walk-in స్వాగతం. Consultation fees visit type ప్రకారం — details కోసం WhatsApp అడగండి.",
+        actions: [{ label: "దిశలు", anchor: "maps" }],
+      },
+      medicine: {
+        text: "మందుల order — prescription ఫోటో మరియు delivery చిరునామా WhatsApp లో పంపండి.",
+        actions: [{ label: "మందుల order", waMsg: "KVR Hospital — mandulu order cheyali" }],
       },
       callback: {
         text: "క్రింద orange కాల్ బ్యాక్ బటన్ నొక్కండి, లేదా WhatsApp లో నంబర్ పంపండి.",
@@ -334,34 +396,32 @@ export const translations: Record<Lang, TranslationBundle> = {
   },
 };
 
+/** Sitara360-style WhatsApp hub: chat, consultation, sample pickup, medicine, care team */
 export function getWhatsappHubOptions(lang: Lang): CareOption[] {
   const t = translations[lang].wa;
   return [
     { id: "chat", label: t.chat, sub: t.chatSub, message: t.chatMsg, icon: "whatsapp" },
     { id: "consult", label: t.consult, sub: t.consultSub, message: t.consultMsg, icon: "calendar" },
+    { id: "sample", label: t.sample, sub: t.sampleSub, message: t.sampleMsg, icon: "activity" },
     {
-      id: "assessment",
-      label: t.assessment,
-      sub: t.assessmentSub,
-      message: t.assessmentMsg,
-      icon: "clipboard",
+      id: "medicine",
+      label: t.medicine,
+      sub: t.medicineSub,
+      message: t.medicineMsg,
+      icon: "pill",
     },
     { id: "bot", label: t.bot, sub: t.botSub, icon: "bot", action: "chatbot" },
   ];
 }
 
+/** Sitara360-style KVR Care assistant menu */
 export function getBotMenuOptions(lang: Lang): CareOption[] {
   const b = translations[lang].bot;
   return [
-    { id: "book", label: b.bookAppointment, replyKey: "book", icon: "calendar" },
-    { id: "timings", label: b.timings, replyKey: "timings", icon: "clock" },
-    { id: "bca", label: b.bodyComposition, replyKey: "bca", icon: "activity" },
-    { id: "echo", label: b.echo, replyKey: "echo", icon: "heart" },
-    { id: "fundus", label: b.fundus, replyKey: "fundus", icon: "eye" },
-    { id: "location", label: b.location, replyKey: "location", icon: "map" },
     { id: "consult", label: b.consultation, replyKey: "consult", icon: "calendar" },
-    { id: "assessment", label: b.healthAssessment, replyKey: "assessment", icon: "clipboard" },
-    { id: "fever", label: b.feverCare, replyKey: "fever", icon: "thermometer" },
-    { id: "callback", label: b.callback, action: "callback", icon: "phone" },
+    { id: "directions", label: b.directions, replyKey: "location", icon: "map" },
+    { id: "timings", label: b.timingsFees, replyKey: "timingsFees", icon: "clock" },
+    { id: "conditions", label: b.conditions, replyKey: "conditions", icon: "clipboard" },
+    { id: "whatsapp", label: b.chatWhatsApp, replyKey: "whatsapp", icon: "whatsapp" },
   ];
 }

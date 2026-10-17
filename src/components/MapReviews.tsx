@@ -1,13 +1,18 @@
 import { Star, ExternalLink, Navigation, MapPin } from "lucide-react";
 import { clinic, mapsEmbedUrl } from "../config";
+import { useSite } from "../i18n/useSite";
+import SectionBackdrop from "./SectionBackdrop";
 
 export default function MapReviews() {
+  const s = useSite();
+
   return (
-    <section className="section" id="location">
-      <div className="container">
+    <section className="section section-photo-band" id="location">
+      <SectionBackdrop scene="location" />
+      <div className="container section-content-layer">
         <div className="section-head">
-          <div className="section-label">Find Us</div>
-          <h2>Location, directions & patient reviews</h2>
+          <div className="section-label">{s.map.label}</div>
+          <h2>{s.map.title}</h2>
           <p>{clinic.location.full}</p>
         </div>
 
@@ -23,30 +28,23 @@ export default function MapReviews() {
             <div className="map-actions">
               <a className="btn btn-primary" href={clinic.links.googleDirections} target="_blank" rel="noreferrer">
                 <Navigation size={16} />
-                Navigate to Hospital
+                {s.map.navigate}
               </a>
               <a className="btn btn-outline" href={clinic.links.googleMaps} target="_blank" rel="noreferrer">
                 <MapPin size={16} />
-                Open in Google Maps
+                {s.map.openMaps}
               </a>
             </div>
           </div>
 
           <div className="reviews-panel">
-            <h3>Patient Reviews</h3>
-            <p className="reviews-intro">
-              See what patients say about KVR Hospital on Google and JustDial.
-            </p>
+            <h3>{s.map.reviewsTitle}</h3>
+            <p className="reviews-intro">{s.map.reviewsIntro}</p>
 
             <div className="review-cards">
-              <a
-                className="review-card"
-                href={clinic.links.googleReviews}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a className="review-card" href={clinic.links.googleReviews} target="_blank" rel="noreferrer">
                 <div className="review-card-head">
-                  <strong>Google Reviews</strong>
+                  <strong>{s.map.googleReviews}</strong>
                   <ExternalLink size={14} />
                 </div>
                 <div className="review-stars">
@@ -60,18 +58,13 @@ export default function MapReviews() {
                   ))}
                   <span>{clinic.reviews.google.rating}</span>
                 </div>
-                <p>{clinic.reviews.google.count}+ ratings on Google Maps</p>
-                <span className="review-link">Read & write reviews →</span>
+                <p>{clinic.reviews.google.count}+ {s.map.googleRatings}</p>
+                <span className="review-link">{s.map.readReviews}</span>
               </a>
 
-              <a
-                className="review-card review-card-jd"
-                href={clinic.links.justdial}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a className="review-card review-card-jd" href={clinic.links.justdial} target="_blank" rel="noreferrer">
                 <div className="review-card-head">
-                  <strong>JustDial</strong>
+                  <strong>{s.map.justdial}</strong>
                   <ExternalLink size={14} />
                 </div>
                 <div className="review-stars">
@@ -85,8 +78,8 @@ export default function MapReviews() {
                   ))}
                   <span>{clinic.reviews.justdial.rating}</span>
                 </div>
-                <p>{clinic.reviews.justdial.count} verified ratings · {clinic.hours}</p>
-                <span className="review-link">View on JustDial →</span>
+                <p>{clinic.reviews.justdial.count} {s.map.verifiedRatings} · {clinic.hours}</p>
+                <span className="review-link">{s.map.viewJd}</span>
               </a>
             </div>
 
@@ -96,11 +89,11 @@ export default function MapReviews() {
                 <span>{clinic.location.full}</span>
               </div>
               <div>
-                <strong>Phone:</strong>{" "}
+                <strong>{s.map.phone}</strong>{" "}
                 <a href={`tel:${clinic.phoneRaw}`}>{clinic.phone}</a>
               </div>
               <div>
-                <strong>Hours:</strong> {clinic.hours}
+                <strong>{s.map.hours}</strong> {clinic.hours}
               </div>
             </div>
           </div>

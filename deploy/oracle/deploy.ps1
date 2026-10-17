@@ -89,22 +89,33 @@ Write-Host "==> Uploading WhatsApp server to /opt/kvr-whatsapp ..."
 Invoke-Ssh "mkdir -p /opt/kvr-whatsapp"
 $wa = Join-Path $Root "whatsapp-server"
 Invoke-Scp "$wa\src" "/opt/kvr-whatsapp/"
+if (Test-Path "$wa\scripts") {
+  Invoke-Ssh "mkdir -p /opt/kvr-whatsapp/scripts"
+  Invoke-Scp "$wa\scripts\*" "/opt/kvr-whatsapp/scripts/"
+}
 Invoke-Scp "$wa\package.json" "/opt/kvr-whatsapp/"
 Invoke-Scp "$wa\package-lock.json" "/opt/kvr-whatsapp/"
 
 Write-Host "==> Installing WhatsApp deps + PM2 restart..."
 Invoke-Ssh @"
+export PATH=/opt/node-v20.18.0-linux-x64/bin:`$PATH
 cd /opt/kvr-whatsapp && npm install --omit=dev
 if pm2 describe kvr-whatsapp >/dev/null 2>&1; then
-  pm2 restart kvr-whatsapp
+  pm2 restart kvr-whatsapp --update-env
 else
   pm2 start src/index.js --name kvr-whatsapp
 fi
 pm2 save
-sudo env PATH=`$PATH:/usr/bin pm2 startup systemd -u $User --hp /home/$User | tail -1 | bash || true
+sudo env PATH=`$PATH:/opt/node-v20.18.0-linux-x64/bin pm2 startup systemd -u $User --hp /home/$User | tail -1 | bash || true
 "@
 
-Invoke-Ssh "sudo chown -R ${User}:${webGroup} /var/www/kvrhospitals && sudo systemctl reload nginx"
+Invoke-Ssh @"
+sudo chown -R ${User}:${webGroup} /var/www/kvrhospitals
+sudo find /var/www/kvrhospitals -type d -exec chmod 755 {} \;
+sudo find /var/www/kvrhospitals -type f -exec chmod 644 {} \;
+if command -v restorecon >/dev/null 2>&1; then sudo restorecon -Rv /var/www/kvrhospitals; fi
+sudo systemctl reload nginx
+"@
 
 Write-Host ""
 Write-Host "✅ Deploy complete!" -ForegroundColor Green

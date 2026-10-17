@@ -40,12 +40,12 @@ export function BodyScanViz() {
       <motion.rect
         x="40"
         width="240"
-        height="6"
-        rx="3"
+        height="8"
+        rx="4"
         fill="url(#scanBeam)"
         filter="url(#glow)"
-        animate={{ y: [36, 148, 36] }}
-        transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+        animate={{ y: [32, 152, 32] }}
+        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
       />
 
       {/* Metric bars */}
@@ -151,10 +151,23 @@ export function FundusViz() {
         r="78"
         fill="none"
         stroke="#1565b8"
-        strokeWidth="2"
-        strokeDasharray="8 12"
+        strokeWidth="2.5"
+        strokeDasharray="10 8"
         animate={{ rotate: -360 }}
-        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+        style={{ transformOrigin: "148px 98px" }}
+      />
+
+      <motion.circle
+        cx="148"
+        cy="98"
+        r="62"
+        fill="none"
+        stroke="#ea580c"
+        strokeWidth="1.5"
+        strokeDasharray="4 10"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
         style={{ transformOrigin: "148px 98px" }}
       />
 
@@ -279,6 +292,347 @@ export function EchoViz() {
   );
 }
 
+/* ─── BCA slide 2: metabolic age dial ─── */
+export function BcaMetabolicViz() {
+  return (
+    <svg viewBox="0 0 320 200" {...vizProps}>
+      <rect x="8" y="8" width="304" height="184" rx="20" fill="#eef6ff" stroke="#c8dff5" strokeWidth="1.5" />
+      <text x="160" y="36" textAnchor="middle" fontSize="10" fill="#64748b" fontWeight="800">
+        METABOLIC AGE
+      </text>
+      <circle cx="160" cy="108" r="58" fill="none" stroke="#dbeafe" strokeWidth="10" />
+      <motion.circle
+        cx="160"
+        cy="108"
+        r="58"
+        fill="none"
+        stroke="#1565b8"
+        strokeWidth="10"
+        strokeLinecap="round"
+        strokeDasharray="220 365"
+        transform="rotate(-90 160 108)"
+        animate={{ strokeDashoffset: [0, -365] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+      />
+      <motion.text
+        x="160"
+        y="112"
+        textAnchor="middle"
+        fontSize="28"
+        fill="#1565b8"
+        fontWeight="900"
+        animate={{ opacity: [1, 0.6, 1] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        42
+      </motion.text>
+      <text x="160" y="132" textAnchor="middle" fontSize="9" fill="#64748b" fontWeight="700">
+        vs chronological 48
+      </text>
+      {[
+        { label: "Fat", widths: [20, 44, 30], color: "#1565b8" },
+        { label: "Muscle", widths: [28, 48, 36], color: "#0d7a6e" },
+        { label: "Water", widths: [22, 40, 32], color: "#0284c7" },
+      ].map((bar, i) => (
+        <g key={bar.label}>
+          <rect x={68 + i * 72} y="158" width="52" height="8" rx="4" fill="#dbeafe" />
+          <motion.rect
+            x={68 + i * 72}
+            y="158"
+            height="8"
+            rx="4"
+            fill={bar.color}
+            animate={{ width: bar.widths }}
+            transition={{ duration: 2, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}
+          />
+          <text x={94 + i * 72} y="182" textAnchor="middle" fontSize="8" fill="#64748b" fontWeight="700">
+            {bar.label}
+          </text>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+/* ─── BCA slide 3: visceral fat focus ─── */
+export function BcaVisceralViz() {
+  return (
+    <svg viewBox="0 0 320 200" {...vizProps}>
+      <rect x="8" y="8" width="304" height="184" rx="20" fill="#f0f7ff" stroke="#c8dff5" strokeWidth="1.5" />
+      <ellipse cx="160" cy="70" rx="28" ry="32" fill="none" stroke="#1565b8" strokeWidth="2" />
+      <path d="M160 102v36M136 118h48M144 138v28c0 10 32 10 32 0v-28" fill="none" stroke="#1565b8" strokeWidth="2" strokeLinecap="round" />
+      <motion.ellipse
+        cx="160"
+        cy="125"
+        rx="34"
+        ry="22"
+        fill="#ea580c"
+        opacity="0.35"
+        animate={{ rx: [30, 38, 30], ry: [18, 26, 18], opacity: [0.25, 0.5, 0.25] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <text x="160" y="128" textAnchor="middle" fontSize="9" fill="#9a3412" fontWeight="800">
+        VISCERAL
+      </text>
+      <rect x="220" y="40" width="72" height="100" rx="10" fill="#fff" stroke="#c8dff5" strokeWidth="1.5" />
+      {[
+        { y: 58, label: "Visceral", val: "Level 8", color: "#ea580c" },
+        { y: 82, label: "Subcut.", val: "Normal", color: "#0d7a6e" },
+        { y: 106, label: "Muscle", val: "Good", color: "#1565b8" },
+      ].map((row, i) => (
+        <g key={row.label}>
+          <motion.rect
+            x="232"
+            y={row.y}
+            width="48"
+            height="8"
+            rx="4"
+            fill={row.color}
+            animate={{ width: [24, 48, 32] }}
+            transition={{ duration: 1.8, repeat: Infinity, delay: i * 0.25 }}
+          />
+          <text x="236" y={row.y + 20} fontSize="7" fill="#64748b" fontWeight="700">
+            {row.label}: {row.val}
+          </text>
+        </g>
+      ))}
+      <motion.rect
+        x="40"
+        width="240"
+        height="5"
+        rx="2.5"
+        fill="#34d399"
+        opacity="0.7"
+        animate={{ y: [48, 155, 48] }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+    </svg>
+  );
+}
+
+/* ─── Fundus slide 2: vessel map ─── */
+export function FundusVesselViz() {
+  return (
+    <svg viewBox="0 0 320 200" {...vizProps}>
+      <rect x="8" y="8" width="304" height="184" rx="20" fill="#fff8f0" stroke="#fcd9b8" strokeWidth="1.5" />
+      <circle cx="160" cy="100" r="72" fill="#431407" opacity="0.15" />
+      <circle cx="160" cy="100" r="58" fill="#7c2d12" opacity="0.35" />
+      {[0, 45, 90, 135, 180, 225, 270, 315].map((deg, i) => (
+        <motion.line
+          key={deg}
+          x1="160"
+          y1="100"
+          x2={160 + 56 * Math.cos((deg * Math.PI) / 180)}
+          y2={100 + 56 * Math.sin((deg * Math.PI) / 180)}
+          stroke={i % 2 ? "#fdba74" : "#fde68a"}
+          strokeWidth="1.5"
+          animate={{ opacity: [0.3, 1, 0.3] }}
+          transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.15 }}
+        />
+      ))}
+      <motion.circle
+        cx="160"
+        cy="100"
+        r="72"
+        fill="none"
+        stroke="#1565b8"
+        strokeWidth="2"
+        strokeDasharray="6 10"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+        style={{ transformOrigin: "160px 100px" }}
+      />
+      <text x="160" y="36" textAnchor="middle" fontSize="10" fill="#9a3412" fontWeight="800">
+        RETINAL VESSEL MAP
+      </text>
+      <motion.text
+        x="160"
+        y="188"
+        textAnchor="middle"
+        fontSize="9"
+        fill="#0d7a6e"
+        fontWeight="800"
+        animate={{ opacity: [1, 0.4, 1] }}
+        transition={{ duration: 1.2, repeat: Infinity }}
+      >
+        SCANNING · LIVE
+      </motion.text>
+    </svg>
+  );
+}
+
+/* ─── Fundus slide 3: diabetic screening ─── */
+export function FundusScreenViz() {
+  return (
+    <svg viewBox="0 0 320 200" {...vizProps}>
+      <rect x="8" y="8" width="304" height="184" rx="20" fill="#fff8f0" stroke="#fcd9b8" strokeWidth="1.5" />
+      <rect x="40" y="36" width="110" height="80" rx="8" fill="#1e293b" />
+      <rect x="48" y="44" width="94" height="64" rx="4" fill="#0f172a" />
+      <motion.rect
+        x="48"
+        y="44"
+        width="94"
+        height="64"
+        rx="4"
+        fill="#ea580c"
+        opacity="0.15"
+        animate={{ opacity: [0.05, 0.25, 0.05] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      />
+      <ellipse cx="95" cy="76" rx="28" ry="26" fill="#7c2d12" opacity="0.8" />
+      <text x="170" y="52" fontSize="9" fill="#64748b" fontWeight="800">
+        DIABETIC EYE SCREEN
+      </text>
+      {[
+        { y: 68, label: "Microaneurysms", ok: false },
+        { y: 88, label: "Hemorrhages", ok: false },
+        { y: 108, label: "Macula", ok: true },
+      ].map((row, i) => (
+        <g key={row.label}>
+          <circle cx="162" cy={row.y - 3} r="5" fill={row.ok ? "#0d7a6e" : "#ea580c"} />
+          <text x="174" y={row.y} fontSize="8" fill="#334155" fontWeight="600">
+            {row.label}
+          </text>
+          <motion.rect
+            x="248"
+            y={row.y - 8}
+            width="40"
+            height="6"
+            rx="3"
+            fill={row.ok ? "#0d7a6e" : "#ea580c"}
+            animate={{ width: row.ok ? [20, 40] : [30, 40, 25] }}
+            transition={{ duration: 1.6, repeat: Infinity, delay: i * 0.2 }}
+          />
+        </g>
+      ))}
+      <motion.g animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>
+        <rect x="40" y="130" width="240" height="28" rx="8" fill="#0d7a6e" opacity="0.12" />
+        <text x="160" y="148" textAnchor="middle" fontSize="9" fill="#0d5c52" fontWeight="800">
+          Early detection · Non-invasive
+        </text>
+      </motion.g>
+    </svg>
+  );
+}
+
+/* ─── Echo slide 2: ultrasound fan ─── */
+export function EchoUltrasoundViz() {
+  return (
+    <svg viewBox="0 0 320 200" {...vizProps}>
+      <rect x="8" y="8" width="304" height="184" rx="20" fill="#f0fdf9" stroke="#b8e8df" strokeWidth="1.5" />
+      <rect x="36" y="40" width="160" height="120" rx="10" fill="#0f172a" />
+      {[0, 1, 2, 3, 4].map((i) => (
+        <motion.path
+          key={i}
+          d={`M56 148 Q${100 + i * 12} ${60 - i * 4} 180 148`}
+          fill="none"
+          stroke="#34d399"
+          strokeWidth="2"
+          animate={{ opacity: [0.2, 0.9, 0.2] }}
+          transition={{ duration: 1.8, repeat: Infinity, delay: i * 0.25 }}
+        />
+      ))}
+      <motion.ellipse
+        cx="116"
+        cy="100"
+        rx="36"
+        ry="28"
+        fill="#ef4444"
+        opacity="0.55"
+        animate={{ scale: [1, 1.08, 1] }}
+        transition={{ duration: 1.1, repeat: Infinity }}
+        style={{ transformOrigin: "116px 100px" }}
+      />
+      <rect x="210" y="48" width="74" height="104" rx="10" fill="#fff" stroke="#b8e8df" strokeWidth="1.5" />
+      <text x="247" y="68" textAnchor="middle" fontSize="8" fill="#64748b" fontWeight="800">
+        ULTRASOUND
+      </text>
+      <motion.path
+        d="M222 148 H272 L260 118 L248 148 L236 128 L222 148"
+        fill="none"
+        stroke="#0d7a6e"
+        strokeWidth="2"
+        animate={{ pathLength: [0, 1, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      />
+      <motion.text
+        x="247"
+        y="100"
+        textAnchor="middle"
+        fontSize="18"
+        fill="#0d7a6e"
+        fontWeight="900"
+        animate={{ opacity: [1, 0.5, 1] }}
+        transition={{ duration: 1.1, repeat: Infinity }}
+      >
+        LIVE
+      </motion.text>
+    </svg>
+  );
+}
+
+/* ─── Echo slide 3: chamber view ─── */
+export function EchoChamberViz() {
+  return (
+    <svg viewBox="0 0 320 200" {...vizProps}>
+      <rect x="8" y="8" width="304" height="184" rx="20" fill="#f0fdf9" stroke="#b8e8df" strokeWidth="1.5" />
+      <text x="160" y="36" textAnchor="middle" fontSize="10" fill="#64748b" fontWeight="800">
+        HEART CHAMBERS
+      </text>
+      <motion.path
+        d="M160 52 C120 52 88 78 88 110c0 28 72 48 72 48s72-20 72-48c0-32-32-58-72-58z"
+        fill="#ef4444"
+        opacity="0.85"
+        animate={{ scale: [1, 1.1, 1, 1.06, 1] }}
+        transition={{ duration: 1.1, repeat: Infinity }}
+        style={{ transformOrigin: "160px 110px" }}
+      />
+      <path d="M160 60 L160 158 M120 90 L200 90 M128 130 L192 130" stroke="#fff" strokeWidth="1.5" opacity="0.5" />
+      {[
+        { x: 128, y: 78, label: "LA" },
+        { x: 178, y: 78, label: "RA" },
+        { x: 128, y: 118, label: "LV" },
+        { x: 178, y: 118, label: "RV" },
+      ].map((ch) => (
+        <text key={ch.label} x={ch.x} y={ch.y} fontSize="9" fill="#fff" fontWeight="800" opacity="0.9">
+          {ch.label}
+        </text>
+      ))}
+      <motion.path
+        d="M24 168 H296"
+        fill="none"
+        stroke="#0d7a6e"
+        strokeWidth="2.5"
+        strokeDasharray="4 6"
+        animate={{ strokeDashoffset: [0, -40] }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+      />
+      <text x="268" y="48" fontSize="12" fill="#0d7a6e" fontWeight="800">
+        EF 62%
+      </text>
+      <motion.text
+        x="160"
+        y="188"
+        textAnchor="middle"
+        fontSize="9"
+        fill="#64748b"
+        fontWeight="700"
+        animate={{ opacity: [0.5, 1, 0.5] }}
+        transition={{ duration: 1.5, repeat: Infinity }}
+      >
+        Valves · Chambers · Function
+      </motion.text>
+    </svg>
+  );
+}
+
+export const diagVisualSets = {
+  bca: [BodyScanViz, BcaMetabolicViz, BcaVisceralViz],
+  fundus: [FundusViz, FundusVesselViz, FundusScreenViz],
+  echo: [EchoViz, EchoUltrasoundViz, EchoChamberViz],
+} as const;
+
+/** @deprecated use diagVisualSets */
 export const diagVisuals = {
   bca: BodyScanViz,
   fundus: FundusViz,

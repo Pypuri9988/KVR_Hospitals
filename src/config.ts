@@ -14,16 +14,16 @@ export const clinic = {
     name: "Dr. Naga Satish Kumar Kota",
     shortName: "Dr. Naga Satish Kumar",
     title: "About the Doctor",
-    qualifications: "MBBS, MD (Internal Medicine)",
-    specialty: "Consultant Physician · Internal Medicine",
-    experience: "10+ Years",
-    experienceLabel: "Clinical Practice",
-    bio: "Dr. Naga Satish Kumar Kota is a consultant physician with MBBS and MD in Internal Medicine. At KVR Hospital, he focuses on diabetes, fatty liver, obesity, hypertension and preventive health — interpreting your reports with you, not just handing over prescriptions.",
+    qualifications: "MD (General Medicine)",
+    specialty: "MD (General Medicine) · Consultant Physician",
+    experience: "AFMS",
+    experienceLabel: "INHS Asvini training",
+    bio: "Dr. Naga Satish Kumar Kota completed postgraduate training in General Medicine at INHS Asvini, Mumbai, under the Indian Armed Forces Medical Services (AFMS).",
     interests: [
-      "Diabetes & metabolic health",
-      "Fatty liver & obesity",
-      "Preventive assessment",
-      "Fever & infection care",
+      "Accurate diagnosis",
+      "Evidence-based treatment",
+      "Personalized patient care",
+      "Prevention of complications",
     ],
   },
   location: {
@@ -59,12 +59,15 @@ export const clinic = {
     logo: "/images/logo.png",
     doctorScrubs: "/images/doctor-scrubs.png",
     doctorFormal: "/images/doctor-formal.png",
+    doctorFormalFull: "/images/doctor-formal-full.png",
+    doctorFormalDisplay: "/images/doctor-formal-display.png",
     doctorClinic: "/images/doctor-clinic.png",
     consultation1: "/images/consultation-1.jpeg",
     consultation2: "/images/consultation-2.jpeg",
-    hospitalHero: "/images/hospital-hero-v2.jpg",
+    hospitalHero: "/images/hospital-night-hero.png",
     hospitalBuild: "/images/hospital-lego.png",
     doctorMessageBg: "/images/doctor-message-bg.jpg",
+    videoSectionBg: "/images/video-section-bg.jpg",
     dietGuide: "/images/diabetes-nutrition-guide.jpeg",
     brochure: "/images/kvr-brochure.jpeg",
   },
@@ -174,28 +177,102 @@ export const clinic = {
   ],
   diagnostics: [
     {
-      id: "bca",
-      title: "Body Composition Analyser",
-      short: "60-second scan",
-      description: "Body fat, visceral fat, muscle mass & metabolic age — painless, no needles.",
-      metrics: ["Body Fat %", "Visceral Fat", "Muscle Mass", "Metabolic Age"],
-    },
-    {
       id: "fundus",
-      title: "Remidio Fundus Camera",
-      short: "Eye screening",
-      description: "Diabetic retinopathy screening — quick and non-invasive.",
+      title: "Remidio AI-Assisted Fundus Camera",
+      short: "Retinal screening",
+      image: "/images/diagnostics/fundus-equipment.png",
+      imageAlt: "Remidio AI-assisted fundus camera at KVR Hospital",
+      description:
+        "Retinal screening to help detect diabetic eye changes and other retinal abnormalities at an early stage.",
       metrics: ["Retinal Health", "Diabetic Eye", "Early Detection"],
     },
     {
+      id: "bca",
+      title: "Body Composition Analyser",
+      short: "Body composition",
+      image: "/images/diagnostics/kvr-promo-bca.png",
+      imageAlt: "InBody 570 body composition analysis at KVR Hospital",
+      description:
+        "Assessment of body fat, muscle mass and other body composition parameters to support weight management and metabolic health.",
+      metrics: ["Body Fat %", "Muscle Mass", "Metabolic Health", "Weight Management"],
+    },
+    {
       id: "echo",
-      title: "2D Echo",
-      short: "Heart scan",
-      description: "Heart function assessment for BP, diabetes & chest symptoms.",
-      metrics: ["Heart Function", "Valves", "Chambers"],
+      title: "2D Echocardiography (2D Echo)",
+      short: "Heart ultrasound",
+      image: "/images/diagnostics/kvr-promo-echo.png",
+      imageAlt: "2D echocardiography at KVR Hospital",
+      description: "Ultrasound imaging to assess heart structure, pumping function and valves.",
+      metrics: ["Heart Structure", "Pumping Function", "Valves"],
+    },
+  ],
+  /** Full-bleed carousel posters (auto-slide); maps each slide to copy via `diagnosticId`. */
+  diagnosticPromoSlides: [
+    {
+      diagnosticId: "bca" as const,
+      image: "/images/diagnostics/kvr-promo-bca.png",
+      imageAlt: "InBody 570 body composition analysis at KVR Hospital",
+      width: 834,
+      height: 1005,
+    },
+    {
+      diagnosticId: "echo" as const,
+      image: "/images/diagnostics/kvr-promo-echo.png",
+      imageAlt: "2D echocardiography at KVR Hospital",
+      width: 832,
+      height: 993,
+    },
+    {
+      diagnosticId: "fundus" as const,
+      image: "/images/diagnostics/kvr-promo-fundus.png",
+      imageAlt: "Remidio AI-assisted fundus camera at KVR Hospital",
+      width: 832,
+      height: 1003,
     },
   ],
 };
+
+/** Section photo bands — `public/images/backgrounds/` */
+export const sectionBackgrounds = {
+  assessments: {
+    src: "/images/backgrounds/assessments-facilities-bg.png",
+    position: "62% 42%",
+  },
+  facilities: {
+    src: "/images/backgrounds/our-facilities-bg.png",
+    position: "center 32%",
+  },
+  fever: {
+    src: "/images/backgrounds/fever-lobby-bg.png",
+    position: "center center",
+  },
+  conditions: {
+    src: "/images/backgrounds/doctor-stethoscope-hero.png",
+    position: "center 40%",
+  },
+  doctor: {
+    src: "/images/backgrounds/doctor-about-bg.png",
+    position: "18% center",
+  },
+  book: {
+    src: "/images/backgrounds/doctor-about-bg.png",
+    position: "72% center",
+  },
+  location: {
+    src: "/images/backgrounds/clinic-hallway.png",
+    position: "center center",
+  },
+  contact: {
+    src: "/images/backgrounds/medical-blue.jpg",
+    position: "center center",
+  },
+  quickActions: {
+    src: "/images/backgrounds/fever-heart-hero.png",
+    position: "center 35%",
+  },
+} as const;
+
+export type SectionBackgroundKey = keyof typeof sectionBackgrounds;
 
 export function waLink(text: string) {
   return `https://wa.me/${clinic.whatsapp.raw}?text=${encodeURIComponent(text)}`;

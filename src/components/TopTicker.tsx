@@ -1,48 +1,26 @@
-import { ChevronRight, Sparkles } from "lucide-react";
-import { clinic, waLink } from "../config";
-
-function TickerItems() {
-  return (
-    <>
-      {clinic.ticker.map((item) => (
-        <span className="ticker-item" key={item.text}>
-          <span className={`ticker-badge ticker-badge-${item.badgeStyle}`}>{item.badge}</span>
-          <span className="ticker-text">
-            {item.text}
-            <em>{item.highlight}</em>
-          </span>
-          <a className="ticker-cta" href={item.href}>
-            {item.cta}
-            <ChevronRight size={14} />
-          </a>
-        </span>
-      ))}
-    </>
-  );
-}
+import { ArrowRight, Sparkles } from "lucide-react";
+import { useSite } from "../i18n/useSite";
 
 export default function TopTicker() {
+  const s = useSite();
+
   return (
-    <div className="top-ticker" aria-label="Announcements">
-      <div className="top-ticker-inner">
-        <span className="top-ticker-label">
-          <Sparkles size={14} />
-          KVR Hospital · {clinic.location.city}
+    <a className="bca-promo-banner" href="#diagnostics" aria-label={`${s.ticker.badge} ${s.ticker.text} ${s.ticker.highlight}`}>
+      <div className="bca-promo-inner">
+        <Sparkles size={16} className="bca-promo-sparkle" aria-hidden="true" />
+        <span className="bca-promo-text">
+          <strong>{s.ticker.badge}</strong>
+          <span className="bca-promo-dot" aria-hidden="true">
+            ·
+          </span>
+          {s.ticker.text}{" "}
+          <strong>{s.ticker.highlight}</strong>
         </span>
-        <div className="top-ticker-scroll">
-          <div className="top-ticker-fade top-ticker-fade-left" aria-hidden="true" />
-          <div className="top-ticker-fade top-ticker-fade-right" aria-hidden="true" />
-          <div className="top-ticker-track">
-            <div className="top-ticker-content">
-              <TickerItems />
-              <TickerItems />
-            </div>
-          </div>
-        </div>
-        <a className="top-ticker-phone" href={waLink("Hello KVR Hospital")} target="_blank" rel="noreferrer">
-          {clinic.phone}
-        </a>
+        <span className="bca-promo-link">
+          {s.ticker.cta}
+          <ArrowRight size={14} aria-hidden="true" />
+        </span>
       </div>
-    </div>
+    </a>
   );
 }

@@ -1,0 +1,18 @@
+{
+  "langPicker": "KVR Hospital కు స్వాగతం 🏥\n\nరామచంద్రపురం · డాక్టర్ నాగ సతీష్ కుమార్ కోటా గారి నిర్వహణలో నివారక ఆరోగ్య సంరక్షణ\n\nదయచేసి మీ భాషను ఎంచుకోండి.",
+  "menuIntro": "*KVR Hospital* 🏥 కు స్వాగతం\n\nరామచంద్రపురం · డాక్టర్ నాగ సతీష్ కుమార్ కోటా\n\nక్రింద *సేవల జాబితా* ను నొక్కి, చిహ్నం ఉన్న మీ సేవను ఎంచుకోండి.",
+  "menuListButton": "సేవల జాబితా",
+  "menuSectionAll": "అన్ని సేవలు",
+  "hubQuickIntro": "మీకు ఈ రోజు ఎలా సహాయపడాలి?",
+  "listFooterHint": "ఎంపిక కోసం ఒక సేవపై నొక్కండి.",
+  "chatWelcome": "💬 *KVR Hospital చాట్*\n\nమీరు మా సంరక్షణ బృందంతో అనుసంధానమైనారు — మా బృందం ఇక్కడే వెంటనే సమాధానం ఇస్తుంది.\n\nమీ ప్రశ్న లేదా అభ్యర్థనను క్రింద పంపండి.",
+  "conditions": "🩺 *మేము చికిత్స చేసే వ్యాధులు*\n\n• మధుమేహం & ప్రీ-డయాబెటిస్\n• రక్తపోటు (BP)\n• ఊబకాయం & చమురు ఆరోగ్యం\n• కాలేయ కొళ్లు & థైరాయిడ్\n• జ్వరం / టైఫాయిడ్ / డెంగూ\n• వృద్ధ & నివారక సంరక్షణ\n\nకన్సల్టేషన్ బుక్ చేయాలా?",
+  "consultConfirmSuffix": "డాక్టర్ నాగ సతీష్ కుమార్ కోటా (MD Internal Medicine) మీ అభ్యర్థనను పరిశీలిస్తారు.\n\n🌐 ",
+  "feverSuffix": "KVR Hospital లో ఆధారిత చికిత్స — ప్రతి టైఫాయిడ్‌కు ఇంజెక్షన్ అవసరం లేదు; ప్రతి డెంగూ‌కు platelet అవసరం లేదు.\n\nలక్షణాలు ఇక్కడ పంపండి లేదా నేరుగా రండి.\n\n📞 ",
+  "medicineConfirmSuffix": "మందulos prescription photo, రోగi పeరu, అందincu చirunAmaa, ఫōn naMbar paMpaMDi.\nఅందubATu mariyu అందimpa WhatsApp lO nirddhAriMchutamu.\n\n📞 ",
+  "registerPromptSuffix": "KVR Hospital కu స్వాగతం! దయచేసi ఇవi paMpaMDi:\n• పూర్తi పeరu\n• వayassu\n• మobeil naMbar\n• ప్రadhAna arogya samasya\n\nమా బృందం నamōdu chesi tvaralo nirddhAriMchutundi.\n\n📞 ",
+  "default": "దayacēsi krinda *sēvala jābitā* nu nokki, anni sēvalanu chudandi.\n*menu* ani type chesite menu malle vastundi.",
+  "quickChat": "💬 చాట్",
+  "quickBook": "📅 అపాయింట్మెంట్",
+  "quickMenu": "📋 సేవల జాబితా"
+}

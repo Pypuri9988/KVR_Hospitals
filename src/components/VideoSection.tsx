@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { clinic } from "../config";
 import { useLanguage } from "../i18n/LanguageContext";
+import { useSite } from "../i18n/useSite";
 import { translations } from "../i18n/translations";
 
 export default function VideoSection() {
@@ -10,6 +11,7 @@ export default function VideoSection() {
   const mutedRef = useRef(true);
   const [muted, setMuted] = useState(true);
   const { lang } = useLanguage();
+  const s = useSite();
   const t = translations[lang].video;
 
   useEffect(() => {
@@ -57,7 +59,7 @@ export default function VideoSection() {
     <section ref={sectionRef} className="video-section-cinematic" id="video">
       <div
         className="video-section-bg"
-        style={{ backgroundImage: `url(${clinic.images.doctorMessageBg})` }}
+        style={{ backgroundImage: `url(${clinic.images.videoSectionBg})` }}
         aria-hidden="true"
       />
       <div className="video-section-overlay" aria-hidden="true" />
@@ -65,17 +67,10 @@ export default function VideoSection() {
       <div className="container">
         <div className="video-section-grid">
           <div className="video-section-copy video-section-copy-light">
-            <div className="section-label">From Our Physician</div>
-            <h2>A message from your doctor</h2>
-            <p>
-              Watch Dr. Naga Satish Kumar explain why early detection matters for{" "}
-              <strong>diabetes</strong>, <strong>fever care</strong>, fatty liver and lifestyle
-              diseases — and how preventive medicine helps you act before complications develop.
-            </p>
-            <p className="video-section-note">
-              Scroll to play — tap unmute to hear. Book a Preventive Health Assessment if you are
-              above 35 or have family history of metabolic disease.
-            </p>
+            <div className="section-label">{s.video.label}</div>
+            <h2>{s.video.title}</h2>
+            <p>{s.video.text}</p>
+            <p className="video-section-note">{s.video.note}</p>
           </div>
 
           <div className="video-phone-wrap">
