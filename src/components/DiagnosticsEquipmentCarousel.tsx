@@ -82,7 +82,15 @@ export default function DiagnosticsEquipmentCarousel({ onIndexChange }: Props) {
           {slides.map((slide, slideIndex) => {
             const item = s.diagnostics.items[slide.diagnosticId];
             return (
-              <figure className="diag-equip-slide" key={`${slide.diagnosticId}-${slideIndex}`} style={{ width: slideW || "100%" }}>
+              <figure
+                className="diag-equip-slide"
+                key={`${slide.diagnosticId}-${slideIndex}`}
+                style={
+                  slideW > 0
+                    ? { width: slideW, minWidth: slideW, flex: `0 0 ${slideW}px` }
+                    : { flex: "0 0 100%", width: "100%" }
+                }
+              >
                 <img
                   src={slide.image}
                   alt={slide.imageAlt ?? item?.title ?? slide.diagnosticId}

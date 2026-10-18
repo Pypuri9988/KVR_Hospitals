@@ -74,7 +74,14 @@ export default function HeroSection() {
           <div className="hero-doctor-frame">
             <div className="hero-doctor-frame-border" aria-hidden="true" />
             <div className="hero-doctor-photo-wrap">
-              <img src={clinic.images.doctorScrubs} alt={clinic.doctor.name} width={520} height={620} />
+              <img
+                src={clinic.images.doctorScrubs}
+                alt={clinic.doctor.name}
+                width={1200}
+                height={1098}
+                decoding="async"
+                fetchPriority="high"
+              />
             </div>
             <div className="hero-doctor-plaque">
               <p className="hero-doctor-plaque-label">{s.hero.physicianLabel}</p>

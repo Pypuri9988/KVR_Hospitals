@@ -57,10 +57,13 @@ export const clinic = {
   logo: "/images/logo.png",
   images: {
     logo: "/images/logo.png",
-    doctorScrubs: "/images/doctor-scrubs.png",
-    doctorFormal: "/images/doctor-formal.png",
+    doctorScrubs: "/images/doctor-scrubs-hd.jpg",
+    /** About the Doctor section — HD waist-up portrait */
+    doctorAbout: "/images/doctor-scrubs-hd.jpg",
+    doctorFormal: "/images/doctor-scrubs-hd.jpg",
     doctorFormalFull: "/images/doctor-formal-full.png",
     doctorFormalDisplay: "/images/doctor-formal-display.png",
+    doctorFormalHires: "/images/doctor-formal-hires.png",
     doctorClinic: "/images/doctor-clinic.png",
     consultation1: "/images/consultation-1.jpeg",
     consultation2: "/images/consultation-2.jpeg",

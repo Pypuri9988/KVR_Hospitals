@@ -95,7 +95,15 @@ export default function App() {
         <div className="container doctor-layout section-content-layer">
           <div className="doctor-gallery">
             <div className="doctor-gallery-main photo-panel">
-              <img src={clinic.images.doctorScrubs} alt={clinic.doctor.name} loading="lazy" />
+              <img
+                src={clinic.images.doctorAbout}
+                alt={clinic.doctor.name}
+                loading="eager"
+                decoding="async"
+                width={1200}
+                height={1098}
+                fetchPriority="high"
+              />
             </div>
           </div>
           <div className="doctor-info">
@@ -158,6 +166,8 @@ export default function App() {
                 <img
                   src={clinic.images.doctorFormal}
                   alt={clinic.doctor.name}
+                  width={1200}
+                  height={1098}
                   loading="eager"
                   decoding="async"
                   fetchPriority="high"
@@ -187,11 +197,25 @@ export default function App() {
               <div className="form-row">
                 <div className="field">
                   <label htmlFor="name">{s.book.name}</label>
-                  <input id="name" name="name" required placeholder={s.book.namePh} />
+                  <input
+                    id="name"
+                    name="name"
+                    required
+                    autoComplete="name"
+                    placeholder={s.book.namePh}
+                  />
                 </div>
                 <div className="field">
                   <label htmlFor="mobile">{s.book.mobile}</label>
-                  <input id="mobile" name="mobile" required placeholder={s.book.mobilePh} />
+                  <input
+                    id="mobile"
+                    name="mobile"
+                    type="tel"
+                    inputMode="tel"
+                    autoComplete="tel"
+                    required
+                    placeholder={s.book.mobilePh}
+                  />
                 </div>
               </div>
               <div className="field">

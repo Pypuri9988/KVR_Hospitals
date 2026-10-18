@@ -1774,13 +1774,37 @@ textarea {
 }
 
 @media (max-width: 900px) {
-  .diag-sitara-layout {
+  .diag-sitara-layout,
+  .diag-unified {
     grid-template-columns: 1fr;
+    min-width: 0;
+  }
+
+  .diag-sitara-carousel {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
   }
 
   .diag-sitara-carousel .diag-equip-viewport {
-    width: min(100%, calc(min(560px, 78vh) * var(--promo-w) / var(--promo-h)));
+    width: 100%;
+    max-width: 100%;
     margin-inline: auto;
+  }
+
+  .diag-sitara-carousel .diag-equip-slide img {
+    object-fit: cover;
+    object-position: center;
+    background: #dfe6ec;
+  }
+
+  .diag-sitara-perks {
+    grid-template-columns: 1fr;
+  }
+
+  .diag-sitara-perks .diag-sitara-perk:nth-child(3) {
+    grid-column: auto;
   }
 }
 
