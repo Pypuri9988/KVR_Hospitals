@@ -94,14 +94,14 @@ export default function App() {
         <SectionBackdrop scene="doctor" />
         <div className="container doctor-layout section-content-layer">
           <div className="doctor-gallery">
-            <div className="doctor-gallery-main photo-panel">
+            <div className="doctor-gallery-main doctor-portrait-frame">
               <img
                 src={clinic.images.doctorAbout}
                 alt={clinic.doctor.name}
                 loading="eager"
                 decoding="async"
-                width={1200}
-                height={1098}
+                width={1000}
+                height={1250}
                 fetchPriority="high"
               />
             </div>
